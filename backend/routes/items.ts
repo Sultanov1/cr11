@@ -6,7 +6,10 @@ import {imagesUpload} from '../multer';
 
 const itemsRouter = Router();
 
-itemsRouter.post('/', auth, imagesUpload.single('image'),
+itemsRouter.post(
+  '/',
+  auth,
+  imagesUpload.single('image'),
   async (req: RequestWithUser, res, next) => {
     try {
       const item = new Item({
@@ -58,6 +61,25 @@ itemsRouter.get('/:id', async (req, res, next) => {
     return res.send(item);
   } catch (e) {
     return next(e);
+  }
+});
+
+itemsRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
+  try {
+    let _id: Types.ObjectId;
+    try {
+      _id = new Types.ObjectId(req.params.id);
+    } catch {
+      return res.status(404).send({ error: 'Wrong ObjectId!' });
+    }
+    const results = await Item.findByIdAndDelete(_id);
+    if (!results) {
+      return res.status(404).send({ error: 'Not found!' });
+    }
+
+    return res.send(results);
+  } catch (error) {
+    return next(error);
   }
 });
 

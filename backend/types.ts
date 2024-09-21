@@ -1,16 +1,16 @@
-import {Model} from 'mongoose';
+import { Model } from 'mongoose';
 
 export interface UserFields {
   username: string;
   password: string;
+  nickname: string;
+  phone: string;
   token: string;
-  displayName: string,
-  phone: string,
 }
 
 export interface UserMethods {
-  checkPassword(password: string): Promise<boolean>;
   generateToken(): void;
+  checkPassword(password: string): Promise<boolean>;
 }
 
-export type UserModel = Model<UserFields, {}, UserMethods>;
+export type UserModel = Model<UserFields, unknown, UserMethods>;

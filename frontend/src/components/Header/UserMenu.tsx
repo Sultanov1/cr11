@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { User } from '../../types';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Button, Menu, MenuItem, styled } from '@mui/material';
 import { useAppDispatch } from '../../app/hooks';
 import { logout } from '../../features/users/usersThunk';
+import { Link } from 'react-router-dom';
 
 interface Props {
   user: User;
@@ -11,6 +12,13 @@ interface Props {
 const UserMenu: React.FC<Props> = ({ user }) => {
   const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const LinkItem = styled(Link)({
+    color: 'inherit',
+    textDecoration: 'none',
+    '&:hover': {
+      color: 'inherit',
+    },
+  });
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -27,7 +35,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
   return (
     <>
       <Button color="inherit" onClick={handleClick}>
-        Hello, {user.username}!
+        Hello, {user.nickname}!
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -35,6 +43,9 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         onClose={handleClose}
         keepMounted
       >
+        <MenuItem>
+          <LinkItem to={'/submit'}>Create Item</LinkItem>
+        </MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </>

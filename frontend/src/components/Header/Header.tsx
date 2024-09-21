@@ -27,7 +27,7 @@ const Header = () => {
             component="div"
             sx={{ flexGrow: 1 }}
           >
-            <Link to="/">Flea Market</Link>
+            <Link to="/">Market</Link>
           </Typography>
           {user ? <UserMenu user={user} /> : <AnonymousMenu />}
         </Grid>

@@ -10,9 +10,9 @@ import {
   persistStore,
 } from 'redux-persist';
 import { usersReducer } from '../features/users/usersSlice';
+import { categoriesReducer } from '../features/categories/categoriesSlice';
 import storage from 'redux-persist/lib/storage';
-import { itemsReducer } from '../features/items/ItemSlice.ts';
-import { categoriesReducer } from '../features/categories/categoriesSlice.ts';
+import { itemsReducer } from '../features/items/ItemsSlice.ts';
 
 const usersPersistConfig = {
   key: 'shop:users',

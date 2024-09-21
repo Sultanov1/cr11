@@ -3,14 +3,14 @@ import { NavLink } from 'react-router-dom';
 
 const AnonymousMenu = () => {
   return (
-    <Grid>
+    <Grid item>
       <Button
         sx={{ fontWeight: 600, fontSize: 18 }}
         component={NavLink}
         to="/register"
         color="inherit"
       >
-        Register
+        Sign Up
       </Button>
       <Button
         sx={{ fontWeight: 600, fontSize: 18 }}
@@ -18,7 +18,7 @@ const AnonymousMenu = () => {
         to="/login"
         color="inherit"
       >
-        Log in
+        Sign In
       </Button>
     </Grid>
   );

@@ -6,10 +6,10 @@ import {
   ListItemText,
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useEffect } from 'react';
-import { getItems } from '../items/ItemThunk';
-import { getCategories } from './categoriesThunk';
 import { selectCategories } from './categoriesSlice';
+import { useEffect } from 'react';
+import { getCategories } from './categoriesThunk';
+import { getItems } from '../items/ItemsThunk.ts';
 
 const Categories = () => {
   const categories = useAppSelector(selectCategories);
@@ -20,11 +20,7 @@ const Categories = () => {
   }, [dispatch]);
 
   const selectCategory = async (id: string) => {
-    try {
-      await dispatch(getItems(id));
-    } catch (error) {
-      console.error("Error fetching items for category:", error);
-    }
+    await dispatch(getItems(id));
   };
 
   return (
@@ -41,22 +37,16 @@ const Categories = () => {
         <List>
           <ListItem disablePadding>
             <ListItemButton onClick={() => dispatch(getItems())}>
-              <ListItemText primary="All items" />
+              <ListItemText>All items</ListItemText>
             </ListItemButton>
           </ListItem>
-          {categories.length > 0 ? (
-            categories.map((category) => (
-              <ListItem key={category._id} disablePadding>
-                <ListItemButton onClick={() => selectCategory(category._id)}>
-                  <ListItemText primary={category.title} />
-                </ListItemButton>
-              </ListItem>
-            ))
-          ) : (
-            <ListItem>
-              <ListItemText primary="No categories available" />
+          {categories.map((category) => (
+            <ListItem key={category._id} disablePadding>
+              <ListItemButton onClick={() => selectCategory(category._id)}>
+                <ListItemText>{category.title}</ListItemText>
+              </ListItemButton>
             </ListItem>
-          )}
+          ))}
         </List>
       </nav>
     </Box>

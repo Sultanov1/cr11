@@ -11,10 +11,10 @@ import {
   Typography,
 } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectRegisterError } from './usersSlice';
 import { register } from './usersThunk';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -50,7 +50,7 @@ const Register = () => {
       await dispatch(register(state)).unwrap();
       navigate('/');
     } catch (e) {
-       console.error('Something went wrong', e);
+      // error
     }
   };
 

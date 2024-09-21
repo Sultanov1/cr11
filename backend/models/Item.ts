@@ -8,7 +8,7 @@ const ItemSchema = new Schema({
     ref: 'Category',
     required: true,
     validate: {
-      validator: async (value: Types.ObjectId) => {
+      validator: async (value: Types.ObjectId): Promise<boolean> => {
         const category = await Category.findById(value);
         return Boolean(category);
       },
@@ -23,22 +23,26 @@ const ItemSchema = new Schema({
     type: Number,
     required: true,
     validate: {
-      validator: async (value: number) => {
-        if (value < 0) {
-          return false;
-        }
+      validator: (value: number): boolean => {
+        return value >= 0;
       },
       message: 'The price can not be below zero!',
     },
   },
-  description: String,
-  image: String,
+  description: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
   owner: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
     validate: {
-      validator: async (value: Types.ObjectId) => {
+      validator: async (value: Types.ObjectId): Promise<boolean> => {
         const user = await User.findById(value);
         return Boolean(user);
       },
@@ -47,6 +51,6 @@ const ItemSchema = new Schema({
   },
 });
 
-const Item = model('Product', ItemSchema);
+const Item = model('Item', ItemSchema);
 
 export default Item;
