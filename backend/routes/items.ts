@@ -1,43 +1,13 @@
-import express from 'express';
-import mongoose from 'mongoose';
+import { Router } from 'express';
+import mongoose, { Types } from 'mongoose';
 import Item from '../models/Item';
-import auth, {RequestWithUser} from '../middleware/auth';
+import auth, { RequestWithUser } from '../middleware/auth';
 import {imagesUpload} from '../multer';
 
-const itemsRouter = express.Router();
+const itemsRouter = Router();
 
-itemsRouter.get('/', async (req, res, next) => {
-  try {
-    const categoryFilter = req.query.category as string;
-
-    if(!categoryFilter) {
-      const item = await Item.find();
-      return res.send(item);
-    }
-
-    const commodities = await Item.find({category: categoryFilter});
-
-    return res.send(commodities);
-  } catch (e) {
-    return next(e);
-  }
-});
-
-itemsRouter.get('/:id', async (req, res, next) => {
-  try {
-    const post = await Item.findById(req.params.id).populate('user', 'username phone displayName');
-
-    if (!post) {
-      return res.sendStatus(404);
-    }
-
-    return res.send(post);
-  } catch (e) {
-    return next(e);
-  }
-});
-
-itemsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWithUser, res, next) => {
+itemsRouter.post('/', auth, imagesUpload.single('image'),
+  async (req: RequestWithUser, res, next) => {
     try {
       const item = new Item({
         category: req.body.category,
@@ -45,18 +15,50 @@ itemsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWit
         price: parseFloat(req.body.price),
         description: req.body.description,
         image: req.file ? req.file.filename : null,
-        user: req.user?._id,
+        owner: req.user?._id,
       });
 
       await item.save();
       res.send(item);
     } catch (e) {
       if (e instanceof mongoose.Error.ValidationError) {
-        return res.status(400).send(e);
+        return res.status(422).send(e);
       }
+
       return next(e);
     }
   },
 );
+
+itemsRouter.get('/', async (_req, res, next) => {
+  try {
+    const results = await Item.find().populate('owner', 'nickname phone');
+
+    res.send(results);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+itemsRouter.get('/:id', async (req, res, next) => {
+  try {
+    let _id: Types.ObjectId;
+    try {
+      _id = new Types.ObjectId(req.params.id);
+    } catch {
+      return res.status(404).send({ error: 'Wrong ObjectId!' });
+    }
+
+    const item = await Item.findById(_id).populate('owner', 'nickname phone');
+
+    if (!item) {
+      return res.status(404).send({ error: 'Not found!' });
+    }
+
+    return res.send(item);
+  } catch (e) {
+    return next(e);
+  }
+});
 
 export default itemsRouter;

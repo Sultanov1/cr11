@@ -1,14 +1,9 @@
-import Items from './Items';
-import { Box } from '@mui/material';
-import Categories from '../categories/Categories.tsx';
-
-const ItemsPage = () => {
+const ItemPage = () => {
   return (
-    <Box display="flex">
-      <Categories />
-      <Items />
-    </Box>
+    <div>
+      Item Page
+    </div>
   );
 };
 
-export default ItemsPage;
+export default ItemPage;

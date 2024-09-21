@@ -38,13 +38,5 @@ categoriesRouter.get('/', async (_req, res, next) => {
   }
 });
 
-categoriesRouter.get('/:id', async (req, res, next) => {
-  try {
-    const categories = await Item.find({category: req.params.id});
-    return res.send(categories);
-  } catch (e) {
-    return next(e);
-  }
-});
 
 export default categoriesRouter;
